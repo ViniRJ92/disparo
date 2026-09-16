@@ -17,7 +17,9 @@
     "typecheck:server": "tsc -p tsconfig.json",
     "typecheck:web": "tsc -p web/tsconfig.json",
     "typecheck": "npm run typecheck:server && npm run typecheck:web",
-    "test": "node --disable-warning=ExperimentalWarning --test \"tests/**/*.test.ts\""
+    "test": "node --disable-warning=ExperimentalWarning --test \"tests/**/*.test.ts\"",
+    "desktop": "electron .",
+    "dist:win": "npm run build:web && electron-builder --win nsis"
   },
   "dependencies": {
     "@fastify/static": "^10.1.3",
@@ -30,9 +32,54 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.1",
+    "electron": "^44.4.1",
+    "electron-builder": "^26.15.3",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "typescript": "^7.0.2",
     "vite": "^8.3.0"
+  },
+  "main": "desktop/main.cjs",
+  "build": {
+    "appId": "com.vinirj92.disparo",
+    "productName": "Disparo",
+    "copyright": "Vinicius Braga",
+    "directories": {
+      "output": "release"
+    },
+    "asar": false,
+    "files": [
+      "desktop/**",
+      "src/**",
+      "dist/web/**",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "desktop/icon.png",
+      "artifactName": "Disparo-Setup-${version}.exe"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": "always",
+      "createStartMenuShortcut": true,
+      "shortcutName": "Disparo",
+      "uninstallDisplayName": "Disparo",
+      "installerLanguages": [
+        "pt_BR"
+      ],
+      "language": "1046",
+      "runAfterFinish": true,
+      "deleteAppDataOnUninstall": false
+    }
   }
 }
